@@ -1,5 +1,5 @@
 import json
-from dateutil import parser
+from dateutil.parser import parse, parserinfo
 
 def calculate_insurance_cost (comm_id, amount, date) :
     indexIncreased = 0
@@ -11,10 +11,10 @@ def calculate_insurance_cost (comm_id, amount, date) :
         with open('rbiIndex.json') as json_file :
             dictionary = json.load(json_file)
             print(":::: ", dictionary.get(comm_id).get('INDEXES').get('INDX042012')) 
-            print(":::: ", dictionary.get(comm_id).get('INDEXES').get('INDX'+str(parser.parse(date).strftime("%m")) + str(parser.parse(date).year)))
-           #yeartoSearch =  'INDX'+str(parser.parse(date).strftime("%m") +'2012')
+            print(":::: ", dictionary.get(comm_id).get('INDEXES').get('INDX'+str(parse(date).strftime("%m")) + str(parse(date).year)))
+           #yeartoSearch =  'INDX'+str(parse(date).strftime("%m") +'2012')
             yeartoSearch = 'INDX042012'
-            yearFromFar = 'INDX'+str(parser.parse(date).strftime("%m")) + str(parser.parse(date).year)
+            yearFromFar = 'INDX'+str(parse(date).strftime("%m")) + str(parse(date).year)
             indexIncreased = dictionary.get(comm_id).get('INDEXES').get(yearFromFar)/dictionary.get(comm_id).get('INDEXES').get(yeartoSearch)
             print ("indexIncreased :: ", indexIncreased)
         json_file.close()
