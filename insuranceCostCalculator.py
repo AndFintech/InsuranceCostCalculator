@@ -27,36 +27,37 @@ def lambda_handler(event, context):
         body = json.loads(event['body'])
         financial_doc_json = body['financial_doc_json']
         policy_doc_json = body['policy_doc_json']
-   #with open('FarJson.json') as far_json :
-        financial_doc_dict = json.load(financial_doc_json)
-        for key in financial_doc_dict.keys() :
-            if (key == "Date") :
-                date = financial_doc_dict.get(key)
-                print("Date :: ",date)
+        for key in financial_doc_json.keys() :
+            if (key == "Date") :               
+                date = financial_doc_json[key]
             
             if(key == "Buildings") :
-                for building in financial_doc_dict.get(key) :
-                    cost = calculate_insurance_cost(building.get('1316040002'),building.get('amount'), date)
+                for building in financial_doc_json[key] :
+                    cost = calculate_insurance_cost('1316040002',building['amount'], date)
                     del building["amount"]
                     building.update(suggested_insurance_cost = cost)
+                    financial_doc_json[key]=building
 
             if(key == "Plant and Machinery") :
-                for plantAndMachin in financial_doc_dict.get(key) :
-                    cost = calculate_insurance_cost('1316040002', plantAndMachin.get('amount'), date)
+                for plantAndMachin in financial_doc_json[key] :
+                    cost = calculate_insurance_cost('1316040002', plantAndMachin['amount'], date)
                     del plantAndMachin["amount"]
                     plantAndMachin.update(suggested_insurance_cost = cost)
+                    financial_doc_json[key]=plantAndMachin
 
             if(key == "Office Equipments") :
-                for officeEquipments in financial_doc_dict.get(key) :
-                    cost = calculate_insurance_cost('1316040002', officeEquipments.get('amount'), date)
+                for officeEquipments in financial_doc_json[key] :
+                    cost = calculate_insurance_cost('1316040002', officeEquipments['amount'], date)
                     del officeEquipments["amount"]
                     officeEquipments.update(suggested_insurance_cost = cost)
+                    financial_doc_json[key]=officeEquipments
 
             if(key == "Furniture & Fixtures") :
-                for furnitureAndFixture in financial_doc_dict.get(key) :
-                    cost = calculate_insurance_cost('1316040002', furnitureAndFixture.get('amount'), date)
+                for furnitureAndFixture in financial_doc_json[key] :
+                    cost = calculate_insurance_cost('1316040002', furnitureAndFixture['amount'], date)
                     del furnitureAndFixture["amount"]
                     furnitureAndFixture.update(suggested_insurance_cost = cost)
+                    financial_doc_json[key]=furnitureAndFixture
 
     except Exception as exp:
         print("##### Exception occured while processing :: ", exp)
@@ -66,8 +67,8 @@ def lambda_handler(event, context):
 
         }
     print ("Success")
-    print("Dict ::: ", financial_doc_dict)
+    print("Dict ::: ", financial_doc_json)
     return {
         'statusCode': 200,
-        'body': json.dumps(financial_doc_dict)
+        'body': json.dumps(financial_doc_json)
     }
