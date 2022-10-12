@@ -1,1 +1,1 @@
-dateutil
+python-dateutil==2.5.3
