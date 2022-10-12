@@ -10,11 +10,12 @@ def calculate_insurance_cost (comm_id, amount, date) :
     if result_amt != 0 :
         with open('rbiIndex.json') as json_file :
             dictionary = json.load(json_file)
-            print(":::: ", dictionary[comm_id]['INDEXES']['INDX042012'])
-            print(":::: ", dictionary[comm_id]['INDEXES']['INDX'+str(parser.parse(date).strftime("%m")) + str(parser.parse(date).year)])
+            print(":::: ", dictionary.get(comm_id).get('INDEXES').get('INDX042012')) 
+            print(":::: ", dictionary.get(comm_id).get('INDEXES').get('INDX'+str(parser.parse(date).strftime("%m")) + str(parser.parse(date).year)))
+           #yeartoSearch =  'INDX'+str(parser.parse(date).strftime("%m") +'2012')
             yeartoSearch = 'INDX042012'
             yearFromFar = 'INDX'+str(parser.parse(date).strftime("%m")) + str(parser.parse(date).year)
-            indexIncreased = dictionary[comm_id]['INDEXES'][yearFromFar]/dictionary[comm_id]['INDEXES'][yeartoSearch]
+            indexIncreased = dictionary.get(comm_id).get('INDEXES').get(yearFromFar)/dictionary.get(comm_id).get('INDEXES').get(yeartoSearch)
             print ("indexIncreased :: ", indexIncreased)
         json_file.close()
     return round((result_amt * indexIncreased),2)
