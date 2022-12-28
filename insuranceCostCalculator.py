@@ -10,15 +10,18 @@ def calculate_insurance_cost (comm_id, amount, date) :
     if result_amt != 0 :
         with open('rbiIndex.json') as json_file :
             dictionary = json.load(json_file)
-            datem = datetime.datetime.strptime(date, "%m/%d/%Y")
-            year = str(datem.year)
-            month = datem.month
-            if(month<10):
-                month = "0"+str(month)
-            print(":::: ", dictionary.get(comm_id).get('INDEXES').get('INDX042012')) 
-            print(":::: ", dictionary.get(comm_id).get('INDEXES').get('INDX'+month + year))
-            yeartoSearch = 'INDX042012'
-            yearFromFar = 'INDX'+month + year
+            yeartoSearch = 'INDEX20122013'
+            if date != "":
+                datem = datetime.datetime.strptime(date, "%m/%d/%Y")
+                year = str(datem.year)
+                last_year = str(datem.year-1)
+                yearFromFar = 'INDEX'+last_year + year
+            else :
+                yearFromFar = "INDEX" + str(dictionary.get("MOST_RECENT_YEAR"))
+            # month = datem.month
+            # if(month<10):
+            #     month = "0"+str(month)
+           
             indexIncreased = dictionary.get(comm_id).get('INDEXES').get(yearFromFar)/dictionary.get(comm_id).get('INDEXES').get(yeartoSearch)
             print ("indexIncreased :: ", indexIncreased)
         json_file.close()
@@ -31,7 +34,7 @@ def lambda_handler(event, context):
         body = json.loads(event['body'])
         financial_doc_json = body['financial_doc_json']
         policy_doc_json = body['policy_doc_json']
-        commodity_id='1316040002';
+        commodity_id='1316040002'
         for key in financial_doc_json.keys() :
             if (key == "Date") :               
                 date = financial_doc_json[key]
