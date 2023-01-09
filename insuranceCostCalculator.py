@@ -33,8 +33,8 @@ def lambda_handler(event, context):
         body = json.loads(event['body'])
         financial_doc_json = body['financial_doc_json']
         #policy_doc_json = body['policy_doc_json']
-        occ_category = body["occupancy_category"]
-        occ_subcategory = body["occupancy_subcategory"]
+        occ_category = body['occupancy_category']
+        occ_subcategory = body['occupancy_subcategory']
         with open('commcode.json') as json_file :
             commcodedictionary = json.load(json_file)
             for key in financial_doc_json.keys() :
