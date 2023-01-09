@@ -18,11 +18,13 @@ def calculate_insurance_cost (comm_id, amount, date) :
                 year = str(datem.year)
                 last_year = str(datem.year-1)
                 yearFromFar = 'INDEX'+last_year + year
+                print ("Year from FAR is- ",yearFromFar)
             else :
                 yearFromFar = "INDEX" + str(dictionary.get("MOST_RECENT_YEAR"))
+                print ("Year from FAR is absent so picking MOST RECENT YEAR- ",yearFromFar)
             
             indexIncreased = dictionary.get(comm_id).get('INDEXES').get(yearFromFar)/dictionary.get(comm_id).get('INDEXES').get(yeartoSearch)
-            print ("indexIncreased :: ", indexIncreased)
+            print ("RBI indexIncreased :: from - ",yearFromFar, "to current year is ",indexIncreased)
         json_file.close()
     return round((result_amt * indexIncreased),2)
 
@@ -48,6 +50,7 @@ def lambda_handler(event, context):
 
                 if(key == "Plant and Machinery") :
                     for plantAndMachin in financial_doc_json[key] :
+                        print("P&M for Given Catgory And Subcatgeory - ",commcodedictionary.get(occ_category).get(occ_subcategory).get('P&M'))
                         cost = calculate_insurance_cost(str(commcodedictionary.get(occ_category).get(occ_subcategory).get('P&M')), plantAndMachin['amount'], date)
                         del plantAndMachin["amount"]
                         plantAndMachin.update(suggested_insurance_cost = cost)
@@ -58,7 +61,7 @@ def lambda_handler(event, context):
                         with open('oemapping.json') as json_file :
                             oedict = json.load(json_file)
                             oec = officeEquipments["name"].strip().lower()
-                            print("OEC Taxonomy found - ",oec)
+                            print("OEC Taxonomy found - ",oec,"\n Its Mapped to Code - \n",oedict.get(oec))
                             cost = calculate_insurance_cost(oedict.get(oec), officeEquipments['amount'], date)
                             del officeEquipments["amount"]
                             officeEquipments.update(suggested_insurance_cost = cost)
