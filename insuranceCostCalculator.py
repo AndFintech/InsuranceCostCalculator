@@ -36,6 +36,7 @@ def lambda_handler(event, context):
     print("Running Lambda Handler")
     try :
         body = json.loads(event['body'])
+        print("Body of request is - ",body)
         financial_doc_json = body['financial_doc_json']
         #policy_doc_json = body['policy_doc_json']
         occ_category = body['occupancy_category']
