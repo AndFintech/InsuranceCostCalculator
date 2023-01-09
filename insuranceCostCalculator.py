@@ -7,6 +7,7 @@ def calculate_insurance_cost (comm_id, amount, date) :
     indexIncreased = 0
     try:
         result_amt = float(amount.strip().replace(',',''))
+        print ("Result Amount is - ", result_amt)
     except ValueError:
         result_amt = 0
     if result_amt != 0 :
@@ -26,6 +27,8 @@ def calculate_insurance_cost (comm_id, amount, date) :
             indexIncreased = dictionary.get(comm_id).get('INDEXES').get(yearFromFar)/dictionary.get(comm_id).get('INDEXES').get(yeartoSearch)
             print ("RBI indexIncreased :: from - ",yearFromFar, "to current year is ",indexIncreased)
         json_file.close()
+    final_amt = round((result_amt * indexIncreased),2)
+    print ("Suggested Value is - ",final_amt,"\n Equation is - \n", result_amt, "*",indexIncreased)
     return round((result_amt * indexIncreased),2)
 
 
